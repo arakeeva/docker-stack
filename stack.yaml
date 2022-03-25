@@ -1,0 +1,22 @@
+version: '3'
+volumes:
+ jenkins-data: {}
+services:
+ jenkins:
+  image: jenkins/jenkins:lts
+  deploy:
+    replicas: 1
+    resources:
+      reservations:
+        cpus: '2'
+        memory: 2048M
+    restart_policy:
+       condition: on-failure
+    placement:
+      constraints:
+        - 'node.labels.role==worker'
+  ports:
+    - 8081:8080
+  volumes:
+    - jenkins-data:/var/jenkins_home
+    - /var/run/docker.sock:/var/run/docker.sock
